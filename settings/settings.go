@@ -33,6 +33,6 @@ func (s *Settings) Initialize(){
 	}
 
 	 s.Db= conn
-	s.Db.Debug().AutoMigrate(&models.Product{}) //Database migration
+	s.Db.Debug().AutoMigrate(&models.Product{}, &models.Category{}) //Database migration
 	fmt.Println("Connected to DB!!!")
 }

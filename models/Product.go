@@ -40,7 +40,7 @@ func (p *Product) Save(db *gorm.DB) (*Product, error) {
 }
 
 func (p *Product) GetProducts(db *gorm.DB) (*[]Product, error) {
-	products := []Product{}
+	var products []Product
 	if err := db.Debug().Table("products").Find(&products).Error; err != nil {
 		return &[]Product{}, err
 	}
