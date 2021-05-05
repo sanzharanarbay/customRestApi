@@ -9,6 +9,7 @@ import (
 type Category struct{
 	gorm.Model
 	Name        string `gorm:"size:100;not null;unique" json:"name"`
+	Products []Product `gorm:"foreignKey:CategoryID"`
 }
 
 func (c *Category) Validate() error  {
@@ -31,7 +32,7 @@ func (c *Category) Save(db *gorm.DB) (*Category, error) {
 
 func (c *Category) GetCategories(db *gorm.DB) (*[]Category, error) {
 	cats := []Category{}
-	if err := db.Debug().Table("categories").Find(&cats).Error; err != nil {
+	if err := db.Debug().Table("categories").Preload("Products").Find(&cats).Error; err != nil {
 		return &[]Category{}, err
 	}
 	return &cats, nil
@@ -39,7 +40,7 @@ func (c *Category) GetCategories(db *gorm.DB) (*[]Category, error) {
 
 func (c *Category) GetCategoryById(id int, db *gorm.DB) (*Category, error) {
 	cat := &Category{}
-	if err := db.Debug().Table("categories").Where("id = ?", id).First(cat).Error; err != nil {
+	if err := db.Debug().Table("categories").Where("id = ?", id).Preload("Products").First(cat).Error; err != nil {
 		return nil, err
 	}
 	return cat, nil

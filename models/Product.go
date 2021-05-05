@@ -9,7 +9,7 @@ import (
 type Product struct {
 	gorm.Model
 	Name        string `gorm:"size:100;not null;unique" json:"name"`
-	Category    int    `gorm:"not null"                 json:"category"`
+	CategoryID    int    `gorm:"not null"                  json:"category"`
 	Price int `gorm:"not null"                 json:"price"`
 }
 
@@ -21,7 +21,7 @@ func (p *Product) Validate() error {
 		return errors.New("Price  is invalid")
 	}
 
-	if p.Category < 0 {
+	if p.CategoryID < 0 {
 		return errors.New("Category  is invalid")
 	}
 
@@ -59,7 +59,7 @@ func (p *Product) UpdateProduct(id int, db *gorm.DB) (*Product, error) {
 	if err := db.Debug().Table("products").Where("id = ?", id).Updates(Product{
 		Name:        p.Name,
 		Price: p.Price,
-		Category:    p.Category}).Error; err != nil {
+		CategoryID:    p.CategoryID}).Error; err != nil {
 		return &Product{}, err
 	}
 	return p, nil
